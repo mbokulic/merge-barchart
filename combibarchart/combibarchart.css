@@ -1,0 +1,74 @@
+* {
+  margin: 0;
+}
+
+#chart-wrapper {
+  margin: auto;
+  position: relative;
+}
+
+#y-axis {
+  display: inline-block;
+}
+
+#chart {
+  display: inline-block;
+}
+
+.tooltip {
+  min-height: 15px;
+  background-color: blue;
+  position: absolute;
+  margin-left: 10px;
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.tooltip::after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 20px;
+  width: 100%;
+  line-height: 1;
+  left: -9px;
+  top: 1px;
+  color: blue;
+  content: "\25c2";
+  position: absolute;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.btn {
+  height: 20px;
+  width: 40px;
+}
+
+p {
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 10px;
+}
+
+svg text {
+  user-select: none;
+}
+
+svg .y-axis g:hover, svg rect:hover {
+  cursor: pointer;
+}
+
+svg g.highlight rect{
+  stroke: yellow;
+  stroke-width: 2;
+}
+
+#y-axis g.highlight text {
+  font-weight: bold;
+}
+
+
+
