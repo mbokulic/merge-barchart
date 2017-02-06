@@ -1,0 +1,23 @@
+{
+  "name": "dataviz_examples",
+  "version": "1.0.0",
+  "description": "data vizualizations that I do primarily in d3, but maybe I'll use other libraries",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mbokulic/data_visualizations.git"
+  },
+  "author": "Marko Bokulic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mbokulic/data_visualizations/issues"
+  },
+  "homepage": "https://github.com/mbokulic/data_visualizations#readme",
+  "dependencies": {
+    "d3": "^4.4.1",
+    "font-awesome": "^4.7.0"
+  }
+}
