@@ -1,27 +1,16 @@
-letter,frequency
-A,.08167
-B,.01492
-C,.02780
-D,.04253
-E,.12702
-F,.02288
-G,.02022
-H,.06094
-I,.06973
-J,.00153
-K,.00747
-L,.04025
-M,.02517
-N,.06749
-O,.07507
-P,.01929
-Q,.00098
-R,.05987
-S,.06333
-T,.09056
-U,.02758
-V,.01037
-W,.02465
-X,.00150
-Y,.01971
-Z,.00074
+category,value
+Phoenix,7
+Reno,7.2
+Albuquerque,7.8
+El Paso,7.8
+Boise,11.5
+Denver,13
+Los Angeles,14
+Cheyenne,14.6
+Great Falls,15
+Salt Lake City,15.2
+Bismark,16.2
+Sacramento,17.2
+Spokane,17.4
+San Francisco,20.7
+Honolulu,22.9
