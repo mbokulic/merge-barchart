@@ -70,5 +70,9 @@ svg g.highlight rect{
   font-weight: bold;
 }
 
+.bar {
+  fill: darkred;
+  z-index: 2;
+}
 
 
