@@ -1,7 +1,18 @@
-var Merger = function(data) {
-    this.data = data.slice();  // taking a copy
+var Merger = function() {
+    Event_publisher.call(this);
     this.merges = {};
-    this.current_merge = [];
+    this.queue = [];
+    this.last_merge = {
+        name: null,
+        components: []
+    };
+    this.chart_handler = this.chart_handler.bind(this);
+};
+
+Merger.prototype = Object.create(Event_publisher.prototype);
+
+Merger.prototype.init = function(data) {
+    this.data = data.slice();  // taking a copy
 };
 
 Object.defineProperty(Merger.prototype, "allowed_categories", {
@@ -21,41 +32,41 @@ Merger.prototype.add_category = function(category) {
     if(this.allowed_categories.indexOf(category) == -1) {
         throw new Error('Category not in the dataset!');
     };
-    if(this.current_merge.indexOf(category) > -1) {
+    if(this.queue.indexOf(category) > -1) {
         throw new Error('Cannot repeat categories!');  
     };
-    this.current_merge.push(category);
+    this.queue.push(category);
 };
 
 Merger.prototype.remove_category = function(category) {
-    var index = this.current_merge.indexOf(category)
+    var index = this.queue.indexOf(category)
     if(index === -1) {
         throw new Error('Cannot remove category, it is not in the queue!');  
     };
-    this.current_merge.pop(index + 1);
+    this.queue.splice(index, 1);
 };
 
 Merger.prototype.merge = function(cat_name) {
-    if(this.current_merge.length === 0) {
+    if(this.queue.length === 0) {
         throw new Error('Nothing to merge!');
     };
 
     // defining new category and its position
     var self = this;
-    var idx = this.allowed_categories.indexOf(this.current_merge[0]);
+    var idx = this.allowed_categories.indexOf(this.queue[0]);
     var value = this.data.reduce(function reduce_fun(elem1, elem2) {
-        if(self.current_merge.indexOf(elem2.category) > -1) {
+        if(self.queue.indexOf(elem2.category) > -1) {
             return elem1 + elem2.value;
         } else {
             return elem1;
-        }
+        };
     }, 0);
     this.data.splice(idx, 0, {category: cat_name, value: value});
 
     // removing data
     var removed_data = [];
     this.data = this.data.filter(function(elem) {
-        if(self.current_merge.indexOf(elem.category) > -1) {
+        if(self.queue.indexOf(elem.category) > -1) {
             removed_data.push(elem);
             return false;
         } else {
@@ -64,6 +75,7 @@ Merger.prototype.merge = function(cat_name) {
     });
 
     // storing info on merger
+    this.last_merge.name = cat_name;
     var composite_cats = Object.keys(this.merges);
     this.merges[cat_name] = [];
     for (var i = removed_data.length - 1; i >= 0; i--) {
@@ -72,14 +84,19 @@ Merger.prototype.merge = function(cat_name) {
             Array.prototype.push.apply(this.merges[cat_name],
                                        this.merges[target.category]);
             delete this.merges[target.category];
+            this.last_merge.components.push(target.category);
         } else {
             this.merges[cat_name].push(target);
         };
     };
         
-    this.current_merge = [];
+    this.queue = [];
     return this.data;
 }
+
+Merger.prototype.get_last_merge = function() {
+    return this.last_merge;
+};
 
 Merger.prototype.unmerge = function(cat_name) {
     var cat_position = this.allowed_categories.indexOf(cat_name)
@@ -101,3 +118,12 @@ Merger.prototype.unmerge = function(cat_name) {
     return this.data;
 };
 
+Merger.prototype.chart_handler = function(event) {
+    if(event.action == 'category_click') {
+        if(event.data.add) {
+            this.add_category(event.data.name);
+        } else {
+            this.remove_category(event.data.name);
+        };
+    };
+};

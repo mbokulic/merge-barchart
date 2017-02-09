@@ -2,7 +2,18 @@
   margin: 0;
 }
 
+#panel {
+  display: inline-block;
+  width: 200px;
+}
+
+#panel * {
+  display: block;
+}
+
+
 #chart-wrapper {
+  display: inline-block;
   margin: auto;
   position: relative;
 }
@@ -61,7 +72,7 @@ svg .y-axis g:hover, svg rect:hover {
   cursor: pointer;
 }
 
-svg g.highlight rect{
+svg g.highlight.bar rect {
   stroke: yellow;
   stroke-width: 2;
 }
@@ -75,4 +86,12 @@ svg g.highlight rect{
   z-index: 2;
 }
 
+.label-click-target {
+  fill: yellow;
+  opacity: 0;
+}
 
+#warning-message {
+  color: red;
+  opacity: 0;
+}
