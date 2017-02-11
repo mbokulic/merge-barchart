@@ -2,10 +2,7 @@ var Merger = function() {
     Event_publisher.call(this);
     this.merges = {};
     this.queue = [];
-    this.last_merge = {
-        name: null,
-        components: []
-    };
+
     this.chart_handler = this.chart_handler.bind(this);
     this.menu_handler = this.menu_handler.bind(this);
 
@@ -77,7 +74,6 @@ Merger.prototype.merge = function(cat_name) {
     });
 
     // storing info on merger
-    this.last_merge.name = cat_name;
     var composite_cats = Object.keys(this.merges);
     this.merges[cat_name] = [];
     for (var i = removed_data.length - 1; i >= 0; i--) {
@@ -86,7 +82,6 @@ Merger.prototype.merge = function(cat_name) {
             Array.prototype.push.apply(this.merges[cat_name],
                                        this.merges[target.category]);
             delete this.merges[target.category];
-            this.last_merge.components.push(target.category);
         } else {
             this.merges[cat_name].push(target);
         };
@@ -114,10 +109,6 @@ Merger.prototype.unmerge = function(cat_name) {
 
     delete this.merges[cat_name];
     return this.data;
-};
-
-Merger.prototype.get_last_merge = function() {
-    return this.last_merge;
 };
 
 Merger.prototype.chart_handler = function(event) {
