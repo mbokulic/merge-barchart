@@ -12,7 +12,7 @@ var Menu = function(html_wrapper) {
     this.html_wrapper.append('button')
         .attr('id', 'merge-button')
         .attr('class', 'btn')
-        .on('click', this.merge_handler.bind(this));
+        .on('click', this.merge_button_handler.bind(this));
 
     this.name_input = this.html_wrapper.append('input')
         .attr('type', 'text')
@@ -22,9 +22,13 @@ var Menu = function(html_wrapper) {
         .attr('id', 'warning-message')
         .text('/');
 
+    this.merger_handler = this.merger_handler.bind(this);
+
 };
 
-Menu.prototype.merge_handler = function() {
+Menu.prototype = Object.create(Event_publisher.prototype);
+
+Menu.prototype.merge_button_handler = function() {
     var name = this.name_input.property('value');
     if(name == '') {
         this.warning
@@ -37,43 +41,50 @@ Menu.prototype.merge_handler = function() {
         return;
     };
 
-    var new_data = merger.merge(cat_name);
-    ad_hoc_idx ++;
-    chart.draw(new_data)
-
-    var last_merge = merger.get_last_merge();
-    if(last_merge.components.length > 0) {
-        for(idx in last_merge.components) {
-            var name = last_merge.components[idx];
-            d3.select('#panel')
-              .select('.unmerge_category[category_name=' + name + ']')
-              .on('click', null)
-              .remove();
-        };
-    };
+    this.notify({
+        action: 'merge',
+        data: {name: name}
+    });
+    
 };
 
-//         d3.select('#panel')
-//           .append('p')
-//             .text(cat_name)
-//             .classed('unmerge_category', true)
-//             .attr('category_name', cat_name)
-//             .on('click', function click_handler() {
-//                 var target = d3.select(event.target);
-//                 var cat_name = target.attr('category_name');
-//                 var new_data = merger.unmerge(cat_name);
-//                 chart.draw(new_data);
-//                 target.on('click', null).remove()
-//             });
-//     });
+Menu.prototype.merger_handler = function(event) {
+    if(event.action == 'merge_error') {
+        this.warning
+            .text(event.data.error_message)
+            .style('opacity', 1)
+            .transition()
+            .style('opacity', 0)
+            .duration(1200)
+            .ease(d3.easeCubicIn)
+        return;
+    };
 
-//     d3.select('#sort-button').on('click', function() {
-//         ascending = !ascending;
-//         sort_chart();
-//     });
+    if(event.action == 'merge') {
+        this.name_input.property('value', '');
+        d3.select('#panel')
+            .selectAll('.unmerge-category')
+            .on('click', null)
+            .remove();
 
-// }
+        d3.select('#panel')
+          .selectAll('.unmerge-category')
+            .data(event.data.merged_names)
+            .enter()
+            .append('p')
+            .classed('unmerge-category', true)
+            .text(function(d) {return d})
+            .on('click', this.unmerge_button_handler.bind(this));
+    };
 
-var merge = function(dataset) {
-    chart.draw(dataset);
-}
+};
+
+Menu.prototype.unmerge_button_handler = function() {
+    var click_target = d3.select(event.currentTarget);
+    var cat_name = click_target.text();
+    this.notify({
+        action: 'unmerge',
+        data: {name: cat_name}
+    });
+    click_target.on('click', null).remove();
+};

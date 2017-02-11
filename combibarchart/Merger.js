@@ -7,6 +7,8 @@ var Merger = function() {
         components: []
     };
     this.chart_handler = this.chart_handler.bind(this);
+    this.menu_handler = this.menu_handler.bind(this);
+
 };
 
 Merger.prototype = Object.create(Event_publisher.prototype);
@@ -94,10 +96,6 @@ Merger.prototype.merge = function(cat_name) {
     return this.data;
 }
 
-Merger.prototype.get_last_merge = function() {
-    return this.last_merge;
-};
-
 Merger.prototype.unmerge = function(cat_name) {
     var cat_position = this.allowed_categories.indexOf(cat_name)
     if(cat_position === -1) {
@@ -118,6 +116,10 @@ Merger.prototype.unmerge = function(cat_name) {
     return this.data;
 };
 
+Merger.prototype.get_last_merge = function() {
+    return this.last_merge;
+};
+
 Merger.prototype.chart_handler = function(event) {
     if(event.action == 'category_click') {
         if(event.data.add) {
@@ -127,3 +129,51 @@ Merger.prototype.chart_handler = function(event) {
         };
     };
 };
+
+Merger.prototype.menu_handler = function(event) {
+    if(event.action == 'merge') {
+        // category name exists
+        // event should contain current category names
+        var taken_names = Object.keys(this.merges);
+        if(taken_names.indexOf(event.data.name) > -1) {
+            this.notify({
+                action: 'merge_error',
+                data: {
+                    error_type: 'category_exists',
+                    error_message: 'Category name taken, pick another name!'
+                }
+            });
+            return;
+        };
+
+        if(this.queue.length == 0) {
+            this.notify({
+                action: 'merge_error',
+                data: {
+                    error_type: 'empty_queue',
+                    error_message: 'Merge queue is empty: pick some categories \
+                    that you want to merge!'
+                }
+            });
+            return;
+        };
+
+        var data = this.merge(event.data.name);
+        this.notify({
+            action: 'merge',
+            data: {
+                merged_names: Object.keys(this.merges),
+                dataset: data
+            }
+        });
+    };
+
+    if(event.action == 'unmerge') {
+        var data = this.unmerge(event.data.name);
+        this.notify({
+            action: 'unmerge',
+            data: {dataset: data}
+        });
+    };
+};
+

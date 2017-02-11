@@ -28,6 +28,8 @@ var Chart = function(html_wrapper) {
     this.draw_area.append('g')
         .attr('id', 'y-axis');
 
+    this.merger_handler = this.merger_handler.bind(this);
+
 };
 
 Chart.prototype = Object.create(Event_publisher.prototype);
@@ -161,6 +163,12 @@ Chart.prototype.label_click_handler = function() {
             add: highlighted ? false : true
         }
     });
+};
+
+Chart.prototype.merger_handler = function(event) {
+    if(event.action === 'merge' | event.action === 'unmerge') {
+        this.draw(event.data.dataset);
+    };
 };
 
 var sort_chart = function() {

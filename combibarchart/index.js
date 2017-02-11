@@ -22,8 +22,12 @@ function type(d) {
 var merger = new Merger();
 var chart = new Chart(wrapper);
 var menu = new Menu(d3.select('#panel'));
+// data (model)
 merger.subscribe(chart.merger_handler, chart);
+merger.subscribe(menu.merger_handler, menu);
+// views
 chart.subscribe(merger.chart_handler, merger);
+menu.subscribe(merger.menu_handler, menu);
 
 d3.csv('data.csv', type, function data_callback(error, data) {
     chart.draw(data);
