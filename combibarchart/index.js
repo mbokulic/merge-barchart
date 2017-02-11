@@ -13,22 +13,22 @@ var PADDING = 0.3;
 var wrapper = d3.select('#chart-wrapper')
     .style('width', TOTAL_WIDTH + 'px');
 
+
+// merger is the model and chart/menu are the views
+var merger = new Merger();
+var chart = new Chart(wrapper);
+var menu = new Menu(d3.select('#panel'));
+merger.subscribe(chart.merger_handler, chart);
+merger.subscribe(menu.merger_handler, menu);
+chart.subscribe(merger.chart_handler, merger);
+menu.subscribe(chart.menu_handler, chart);
+menu.subscribe(merger.menu_handler, menu);
+
 // loading data and drawing
 function type(d) {
     d.value = +d.value; // coercing value to numeric
     return d;
 }
-
-var merger = new Merger();
-var chart = new Chart(wrapper);
-var menu = new Menu(d3.select('#panel'));
-// data (model)
-merger.subscribe(chart.merger_handler, chart);
-merger.subscribe(menu.merger_handler, menu);
-// views
-chart.subscribe(merger.chart_handler, merger);
-menu.subscribe(merger.menu_handler, menu);
-
 d3.csv('data.csv', type, function data_callback(error, data) {
     chart.draw(data);
     merger.init(data);

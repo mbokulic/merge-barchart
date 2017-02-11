@@ -3,11 +3,12 @@ var Menu = function(html_wrapper) {
     this.html_wrapper = html_wrapper;
 
     // state variables
-    this.ascending = true;
+    this.ascending = false;
 
     this.html_wrapper.append('i')
         .attr('id', 'sort-button')
         .attr('class', 'fa fa-sort-amount-asc')
+        .on('click', this.sort_button_handler.bind(this));
 
     this.html_wrapper.append('button')
         .attr('id', 'merge-button')
@@ -87,4 +88,12 @@ Menu.prototype.unmerge_button_handler = function() {
         data: {name: cat_name}
     });
     click_target.on('click', null).remove();
+};
+
+Menu.prototype.sort_button_handler = function() {
+    this.notify({
+        action: 'sort',
+        data: {ascending: this.ascending}
+    });
+    this.ascending = !this.ascending;
 };

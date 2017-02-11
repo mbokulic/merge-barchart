@@ -2,9 +2,6 @@ var Chart = function(html_wrapper) {
     Event_publisher.call(this);
     this.html_wrapper = html_wrapper;
 
-    // state variables
-    this.ascending = true;
-
     // drawing inside the wrapper
     this.svg = this.html_wrapper.append('svg')
         .attr('width', TOTAL_WIDTH)
@@ -29,6 +26,8 @@ var Chart = function(html_wrapper) {
         .attr('id', 'y-axis');
 
     this.merger_handler = this.merger_handler.bind(this);
+    this.menu_handler = this.menu_handler.bind(this);
+    this.data = null;
 
 };
 
@@ -124,6 +123,8 @@ Chart.prototype.draw = function(data) {
       .attr('x', -LABELS_WIDTH)
       .attr('y', -self.scale_y.bandwidth() / 2)
 
+    this.data = data;
+
 }
 
 Chart.prototype.bar_click_handler = function() {
@@ -171,38 +172,44 @@ Chart.prototype.merger_handler = function(event) {
     };
 };
 
-var sort_chart = function() {
+Chart.prototype.menu_handler = function(event) {
+    if(event.action === 'sort') {
+        var sort_function;
+        if(event.data.ascending) {
+            sort_function = function(a, b) {
+                return a.value - b.value // larger goes first
+            };
+        } else {
+            sort_function = function(a, b) {
+                return b.value - a.value // smaller goes first
+            };
+        }
 
-    var sort_function;
-    if(ascending) {
-        sort_function = function(a, b) {
-            return a.value - b.value // larger goes first
-        };
-    } else {
-        sort_function = function(a, b) {
-            return b.value - a.value // smaller goes first
-        };
-    }
+        this.scale_y.domain(this.data.sort(sort_function)
+            .map(function(d) { return d.category; }))
+            .copy();
 
-    scale_y.domain(dataset.sort(sort_function)
-        .map(function(d) { return d.category; }))
-        .copy();
+        d3.selectAll("svg #draw-area .bar")
+            .sort(sort_function);
 
-    d3.selectAll("svg #draw-area .bar")
-        .sort(sort_function);
+        var transition = d3.select('svg').transition().duration(400)
+        var delay = function(d, i) { return i * 30; };
 
-    var transition = d3.select('svg').transition().duration(400)
-    var delay = function(d, i) { return i * 30; };
+        var self = this;
+        transition.selectAll(".bar")
+            .attr('transform', function(d, i) {
+                return 'translate(0, ' + (self.scale_y(d.category)) + ')';
+            })
+            .delay(delay)
 
-    transition.selectAll(".bar")
-        .attr('transform', function(d, i) {
-            return 'translate(0, ' + (scale_y(d.category)) + ')';
-        })
-        .delay(delay)
+        axis_y = d3.axisLeft()
+            .scale(this.scale_y)
+            .tickSize(4);
 
-    transition.select('#y-axis')
-        .call(axis_y)
-      .selectAll('g')
-        .delay(delay)
+        transition.select('#y-axis')
+            .call(axis_y)
+          .selectAll('g')
+            .delay(delay);
 
-}
+    };
+};
