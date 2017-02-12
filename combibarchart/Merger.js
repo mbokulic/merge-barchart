@@ -52,7 +52,13 @@ Merger.prototype.merge = function(cat_name) {
 
     // defining new category and its position
     var self = this;
-    var idx = this.allowed_categories.indexOf(this.queue[0]);
+    for (var i = 0; i < this.allowed_categories.length; i++) {
+        if(this.queue.indexOf(this.allowed_categories[i]) > -1) {
+            var highest_category = this.allowed_categories[i];
+            var highest_cat_index = i;
+            break;
+        };
+    };
     var value = this.data.reduce(function reduce_fun(elem1, elem2) {
         if(self.queue.indexOf(elem2.category) > -1) {
             return elem1 + elem2.value;
@@ -60,7 +66,7 @@ Merger.prototype.merge = function(cat_name) {
             return elem1;
         };
     }, 0);
-    this.data.splice(idx, 0, {category: cat_name, value: value});
+    this.data.splice(highest_cat_index, 0, {category: cat_name, value: value});
 
     // removing data
     var removed_data = [];
@@ -88,7 +94,7 @@ Merger.prototype.merge = function(cat_name) {
     };
         
     this.queue = [];
-    return this.data;
+    return highest_category;
 }
 
 Merger.prototype.unmerge = function(cat_name) {
@@ -149,12 +155,15 @@ Merger.prototype.menu_handler = function(event) {
             return;
         };
 
-        var data = this.merge(event.data.name);
+        var active_cats = this.queue;
+        var highest_category = this.merge(event.data.name);
         this.notify({
             action: 'merge',
             data: {
                 merged_names: Object.keys(this.merges),
-                dataset: data
+                dataset: this.data,
+                merge_into: highest_category,
+                active_cats: active_cats 
             }
         });
     };
@@ -163,7 +172,10 @@ Merger.prototype.menu_handler = function(event) {
         var data = this.unmerge(event.data.name);
         this.notify({
             action: 'unmerge',
-            data: {dataset: data}
+            data: {
+                dataset: data,
+                name: event.data.name
+            }
         });
     };
 };
