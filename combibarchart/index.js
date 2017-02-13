@@ -7,7 +7,7 @@ var DRAW_WIDTH = TOTAL_WIDTH - MARGIN.left - MARGIN.right
 
 // height of the elements and the padding between them
 var BAR_HEIGHT = 40; 
-var PADDING = 0.3;
+var PADDING = 0.25;
 
 // setting elements that stay constant
 var wrapper = d3.select('#chart-wrapper')

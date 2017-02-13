@@ -13,7 +13,7 @@ var Chart = function(html_wrapper) {
     this.tooltip = this.html_wrapper.append("div")
         .attr("class", "tooltip")
         .style("opacity", 0)
-        .style('width', '100px');
+        .style('line-height', (BAR_HEIGHT - PADDING*BAR_HEIGHT) + 'px');
 
     this.draw_area.append('g')
         .attr('id', 'x-axis');
@@ -158,7 +158,7 @@ Chart.prototype.draw_merge = function(data, merge_into) {
         .transition()
         .attr('transform', function(d) {
             return 'translate(0, ' + new_height + ')';})
-        .duration(300)
+        .duration(200)
         .remove()
         .each(function() {count++;})
         .on('end', function(transition) {
@@ -177,7 +177,7 @@ Chart.prototype.redraw_after_merge = function(start_width) {
     this.transform_bars(selection, start_width);
     this.draw_axes();
 
-    var transition = this.draw_area.transition().duration(300);
+    var transition = this.draw_area.transition().duration(200);
     this.transform_bars(transition.selectAll('.bar'));
     transition.select('#x-axis').attr('transform',
                                       'translate(0, ' + chart_height + ')');
@@ -226,7 +226,7 @@ Chart.prototype.draw_unmerge = function(data, cat_name) {
     // moving the bars along the y-axis
     var count = 0;
     var t = d3.transition()
-        .duration(300);
+        .duration(200);
 
     d3.selectAll('.bar').transition(t)
         .attr('transform', function(d) {
@@ -241,17 +241,12 @@ Chart.prototype.draw_unmerge = function(data, cat_name) {
                     .range([0, DRAW_WIDTH]);
                 self.draw_axes();
                 d3.selectAll('.bar').selectAll('rect')
-                    .transition().duration(300)
+                    .transition().duration(200)
                     .attr('width', function(d) {return self.scale_x(d.value)})
             }
         });
     d3.select('#x-axis').transition(t)
         .attr('transform', 'translate(0, ' + chart_height + ')');
-
-
-
-
-
 
 };
 
@@ -269,14 +264,14 @@ Chart.prototype.draw_bars = function() {
               self.tooltip
                   .style('top', (self.scale_y(d.category) + MARGIN.top) + 'px')
                   .style('left', (self.scale_x(d.value) + MARGIN.left) + 'px')
-                  .text(d.value + 'mm')
+                  .text(d.value)
                 .transition()
                   .duration(200)
                   .style('opacity', .7);
         })
         .on('mouseout', function(d) {
             self.tooltip.transition()
-              .duration(300)
+              .duration(200)
               .style('opacity', 0);
         })
         .on('click', this.bar_click_handler.bind(this))

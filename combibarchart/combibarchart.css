@@ -1,16 +1,38 @@
+/*PALETTE https://coolors.co/595959-edf4ed-363635-6ca6c1-03440c*/
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans');
+
 * {
   margin: 0;
+  font-family: 'Nunito Sans', sans-serif;
 }
 
+body {
+  margin-top: 50px;
+}
+
+/*MENU*/
 #panel {
   display: inline-block;
   width: 200px;
+  padding: 0 50px;
+  margin-top: 20px;
+}
+
+#panel-wrapper {
+  display: inline-block;
+  vertical-align: top;
 }
 
 #panel * {
   display: block;
+  margin: 0 auto 8px auto;
 }
 
+#panel input[type="text"] {
+  width: 114px;
+  height: 20px;
+  text-align: center;
+}
 
 #chart-wrapper {
   display: inline-block;
@@ -18,6 +40,91 @@
   position: relative;
 }
 
+#warning-message-wrapper {
+  width: 116px;
+  height: 18px;
+}
+
+#warning-message {
+  color: #DB5461;
+  opacity: 0;
+  text-align: center;
+  font-size: 12px;
+}
+
+#category-list {
+  height: 200px;
+  width: 116px;
+  border: 1px solid #B9B9B9;
+  overflow-y: hidden;
+  overflow-y: scroll;
+}
+
+#category-list .unmerge-category {
+  width: 81px;
+  margin: 0;
+  color: #363635;
+  padding: 5px 10px;
+  transition: .2s ease-out;
+  cursor: pointer;
+}
+
+#category-list .unmerge-category:hover {
+  background-color: #EDF4ED;
+}
+
+#category-list .unmerge-category p {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: inline;
+}
+
+#category-list .unmerge-category span {
+  display: inline;
+  font-size: 12px;
+  margin-right: 5px;
+}
+
+.btn {
+  text-decoration: none;
+  color: #fff;
+  background-color: #6CA6C1;
+  text-align: center;
+  letter-spacing: .5px;
+  transition: .2s ease-out;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  padding: 0px 8px;
+  width: 100px;
+
+  border: none;
+  border-radius: 2px;
+  display: inline-block;
+  height: 36px;
+  line-height: 36px;
+  text-transform: uppercase;
+  -webkit-tap-highlight-color: transparent;
+    
+}
+
+.btn:focus {
+  outline: none
+}
+
+.btn:hover {
+  border-color: #346392;
+  color: #346392;
+}
+
+.btn:active {
+  border-color: #27496d;
+  color: #27496d;
+}
+
+/*CHART*/
 #y-axis {
   display: inline-block;
 }
@@ -28,12 +135,13 @@
 
 .tooltip {
   min-height: 15px;
-  background-color: blue;
+  background-color: #363635;
   position: absolute;
   margin-left: 10px;
   color: white;
   text-align: center;
-  vertical-align: middle;
+  padding: 0 10px;
+  font-size: 15px;
 }
 
 .tooltip::after {
@@ -44,46 +152,36 @@
   line-height: 1;
   left: -9px;
   top: 1px;
-  color: blue;
+  color: #363635;
   content: "\25c2";
   position: absolute;
   vertical-align: middle;
   text-align: left;
 }
 
-.btn {
-  height: 20px;
-  width: 40px;
-}
-
-p {
-  text-align: right;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-right: 10px;
-}
-
 svg text {
   user-select: none;
+  fill: #4E4E4E;
+  font-size: 12px;
 }
 
 svg .y-axis g:hover, svg rect:hover {
   cursor: pointer;
 }
 
-svg g.highlight.bar rect {
-  stroke: yellow;
-  stroke-width: 2;
-}
-
 #y-axis g.highlight text {
-  font-weight: bold;
+  fill: #191919;
+  text-decoration: underline;
 }
 
 .bar {
-  fill: darkred;
+  fill: #03440C;
   z-index: 2;
+}
+
+svg g.highlight.bar rect {
+  fill: #046512;
+
 }
 
 .label-click-target {
@@ -91,7 +189,3 @@ svg g.highlight.bar rect {
   opacity: 0;
 }
 
-#warning-message {
-  color: red;
-  opacity: 0;
-}

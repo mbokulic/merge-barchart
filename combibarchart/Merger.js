@@ -82,7 +82,7 @@ Merger.prototype.merge = function(cat_name) {
     // storing info on merger
     var composite_cats = Object.keys(this.merges);
     this.merges[cat_name] = [];
-    for (var i = removed_data.length - 1; i >= 0; i--) {
+    for (var i = 0; i < removed_data.length; i++) {
         var target = removed_data[i]
         if(composite_cats.indexOf(target.category) > -1) {
             Array.prototype.push.apply(this.merges[cat_name],
@@ -137,7 +137,7 @@ Merger.prototype.menu_handler = function(event) {
                 action: 'merge_error',
                 data: {
                     error_type: 'category_exists',
-                    error_message: 'Category name taken, pick another name!'
+                    error_message: 'category name taken!'
                 }
             });
             return;
@@ -148,8 +148,7 @@ Merger.prototype.menu_handler = function(event) {
                 action: 'merge_error',
                 data: {
                     error_type: 'empty_queue',
-                    error_message: 'Merge queue is empty: pick some categories \
-                    that you want to merge!'
+                    error_message: 'merge queue is empty!'
                 }
             });
             return;
