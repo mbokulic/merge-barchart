@@ -13,7 +13,6 @@ var PADDING = 0.25;
 var wrapper = d3.select('#chart-wrapper')
     .style('width', TOTAL_WIDTH + 'px');
 
-
 // merger is the model and chart/menu are the views
 var merger = new Merger();
 var chart = new Chart(wrapper);
@@ -29,9 +28,7 @@ function type(d) {
     d.value = +d.value; // coercing value to numeric
     return d;
 }
-d3.csv('data.csv', type, function data_callback(error, data) {
+d3.csv('js/data.csv', type, function data_callback(error, data) {
     chart.draw(data);
     merger.init(data);
 });
-
-
