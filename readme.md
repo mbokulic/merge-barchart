@@ -1,4 +1,12 @@
-# data visualization examples
-Here you will find examples of data visualizations I made, either in d3.js, R's ggplot2 or other libraries.
+# merge bar chart
+A D3 bar chart where you can merge the individual bars into larger categories. 
 
-At the moment, the samples are limited to just one chart.
+You can access the chart by opening index.html, Github link is [here](index.html). The chart shows made-up bakery sales where it makes sense, e.g., to group all breads into one category.
+
+## usage
+To add a category to the merge queue click on the bar or the label. Write a label for the new category, then click the "MERGE" button.
+
+Click "SORT" to sort the chart ascending or descending (it alternates).
+
+# LICENCE
+MIT
