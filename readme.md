@@ -3,7 +3,7 @@ A D3 bar chart where you can merge the individual bars into larger categories.
 
 [Link to the preview](https://rawgit.com/mbokulic/merge-barchart/master/index.html). 
 
-The chart was **tested only on Chrome** at the moment!
+Tested and **working on Chrome and Firefox**. Versions 55.0.2883.87 and 51.0.1, respectively.
 
 The chart shows made-up bakery sales where it makes sense, e.g., to group all breads into one category.
 
