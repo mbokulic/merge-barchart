@@ -89,6 +89,7 @@ Menu.prototype.merger_handler = function(event) {
 };
 
 Menu.prototype.unmerge_button_handler = function() {
+    var event = d3.event;
     var click_target = d3.select(event.currentTarget);
     var cat_name = click_target.text();
     this.notify({

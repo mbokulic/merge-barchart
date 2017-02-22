@@ -100,7 +100,7 @@ Chart.prototype.draw_axes = function() {
 };
 
 Chart.prototype.bar_click_handler = function() {
-    var target = d3.select(event.currentTarget);
+    var target = d3.select(d3.event.currentTarget);
     var category_name = target.attr('category_name');
     var highlighted = target.classed('highlight');
     target.classed('highlight', !highlighted)
@@ -120,7 +120,7 @@ Chart.prototype.bar_click_handler = function() {
 }
 
 Chart.prototype.label_click_handler = function() {
-    var target = event.currentTarget
+    var target = d3.event.currentTarget
     var parent = d3.select(target.parentNode);
     // category name is in the target
     var category_name = target.getAttribute('category_name');
@@ -274,7 +274,7 @@ Chart.prototype.draw_bars = function() {
               .duration(200)
               .style('opacity', 0);
         })
-        .on('click', this.bar_click_handler.bind(this))
+        .on('click', self.bar_click_handler.bind(self));
     selection.append('rect')
         .attr('y', self.scale_y.padding() * 0.5)
         .attr('height', self.scale_y.bandwidth());
