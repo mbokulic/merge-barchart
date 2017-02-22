@@ -3,7 +3,7 @@ var Menu = function(html_wrapper) {
     this.html_wrapper = html_wrapper;
 
     // state variables
-    this.ascending = false;
+    this.ascending = true;
 
     this.html_wrapper.append('a')
         .attr('id', 'sort-button')
