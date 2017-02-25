@@ -66,7 +66,6 @@ Merger.prototype.merge = function(cat_name) {
             return elem1;
         };
     }, 0);
-    this.data.splice(highest_cat_index, 0, {category: cat_name, value: value});
 
     // removing data
     var removed_data = [];
@@ -78,6 +77,7 @@ Merger.prototype.merge = function(cat_name) {
             return true;
         };
     });
+    this.data.splice(highest_cat_index, 0, {category: cat_name, value: value});
 
     // storing info on merger
     var composite_cats = Object.keys(this.merges);
@@ -129,15 +129,15 @@ Merger.prototype.chart_handler = function(event) {
 
 Merger.prototype.menu_handler = function(event) {
     if(event.action == 'merge') {
-        // category name exists
-        // event should contain current category names
-        var taken_names = Object.keys(this.merges);
-        if(taken_names.indexOf(event.data.name) > -1) {
+        // unavailable names are the names of 
+        var not_allowed = 
+            this.allowed_categories.indexOf(event.data.name) > -1;
+        if(not_allowed) {
             this.notify({
                 action: 'merge_error',
                 data: {
                     error_type: 'category_exists',
-                    error_message: 'category name taken!'
+                    error_message: 'duplicate name!'
                 }
             });
             return;
@@ -177,5 +177,15 @@ Merger.prototype.menu_handler = function(event) {
             }
         });
     };
+
+    if(event.action == 'sort') {
+        if(event.data.ascending) {
+            var sort_fun = function(a, b) {return a.value - b.value};
+        } else {
+            var sort_fun = function(a, b) {return b.value - a.value};
+        };
+        this.data.sort(sort_fun);
+    };
 };
+
 
